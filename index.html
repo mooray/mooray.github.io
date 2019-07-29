@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>	
+<body>
+<title>信息查询</title>
+	<p id="res"></p>
+	
+	请输入股票代码: <input type="text" id="sockCode"> 
+	<button id="cal">点击计算</button>
+
+	<div id="result">
+    <p>=============< 计算结果 >=============</p>
+    市场信息:
+	<a id="mkt"></a></br> 
+	行业信息:
+	<a id="publishname"></a></br> 
+	资产负载率:
+	<a id="zcfzl"></a></br> 	
+	净运营资本:
+	<a id="capital"></a></br> 	
+	现金比率:
+	<a id="cashRate"></a></br> 
+	排名:
+	<a id="rank"></a></br> 		
+	</div>
+</body>
+<script>
+$(document).ready(function(){
+	$("#cal").click(function(){
+		
+        var sockCode = $("#sockCode").val();
+        if (sockCode ==="")
+        {
+            alert("请先输入股票代码");
+            return
+        }
+		$.getJSON("http://118.24.162.124:10000/cal/"+$("#sockCode").val(),
+		function(result){
+            if (result['code'] < 0) {
+                alert("无该股票代码信息,请输入正确的股票代码");
+            }
+            if (result['code'] == 1) 
+            {
+                alert("该股票风险较大,请谨慎购买！");
+            } 
+            
+            $('#mkt').text(result['mkt']);
+            $('#publishname').text(result['publicname']);
+            $('#zcfzl').text(result['zcfzl']);
+            $('#capital').text(result['rate1']);
+            $('#cashRate').text(result['rate2']);
+            $('#rank').text(result['rank']);           
+
+		});
+	});
+});
+</script>	
+</html>
